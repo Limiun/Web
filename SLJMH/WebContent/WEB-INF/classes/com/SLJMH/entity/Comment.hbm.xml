@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+                                   "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+ <!-- 建立类与表的映射 -->
+ <class name="com.SLJMH.entity.Comment" table="comment">
+  <id column="c_id" name="c_id">
+   <generator class="identity"/>
+  </id>
+  <!-- 普通属性 -->
+  <property column="c_userid" generated="never" lazy="false"
+   name="c_userid" type="integer"/>
+  <property column="c_contentid" generated="never" lazy="false"
+   name="c_contentid" type="integer"/>
+  <property column="c_createtime" generated="never" lazy="false"
+   name="c_createtime" type="date"/>
+  <property column="c_content" generated="never" lazy="false"
+   name="c_content" type="string"/>
+  <property column="c_otherid" generated="never" lazy="false"
+   name="c_otherid" type="integer"/>
+  <property column="c_username" generated="never" lazy="false"
+   name="c_username" type="string"/>
+  <property column="c_othername" generated="never" lazy="false"
+   name="c_othername" type="string"/>
+ </class>
+</hibernate-mapping>

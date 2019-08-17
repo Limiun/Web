@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~
+  ~ www.prosysoft.com Inc.
+  ~ Copyright (c) 2019  All Rights Reserved
+  -->
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+    
+<hibernate-mapping>
+	<!-- 建立类与表的映射 -->
+	<class name="com.SLJMH.entity.ComplaintProcessLog" table="user_complaint_process_log">
+		<id name="id" column="id" type="java.lang.Long">
+			<generator class="identity"/>
+		</id>
+		<!-- 普通属性 -->
+		<property name="complaintId" column="complaint_id" type="java.lang.Long"/>
+		<property name="processReason" column="process_reason" type="string"/>
+		<property name="processResult" column="process_result" type="int"/>
+		<property name="processTime" column="process_time" type="java.util.Date"/>
+		<property name="processType" column="process_type" type="int"/>
+		<property name="processUserId" column="process_user_id" type="int"/>
+	</class>
+</hibernate-mapping>

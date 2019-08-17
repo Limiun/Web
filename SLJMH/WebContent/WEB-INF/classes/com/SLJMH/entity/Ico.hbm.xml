@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+    
+<hibernate-mapping>
+
+	<!-- 建立类与表的映射 -->
+	<class name="com.SLJMH.entity.Ico" table="ico">
+		<id name="icoId" column="icoId">
+			<generator class="identity"/>
+		</id>
+		
+		<!-- 普通属性 -->
+		<property name="icoName" column="icoName" type="string"/>
+		
+	</class>
+
+</hibernate-mapping>

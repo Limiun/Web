@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+    
+<hibernate-mapping>
+
+	<!-- 建立类与表的映射 -->
+	<class name="com.SLJMH.entity.Role" table="role">
+		<id name="roleId" column="roleId">
+			<generator class="identity"/>
+		</id>
+		
+		<!-- 普通属性 -->
+		<property name="roleName" column="roleName" type="string"/>
+		<property name="roleDesc" column="roleDesc" type="string"/>
+		
+		<list name="roleUsers" table="role_users"  cascade="all" lazy="false">
+            <key column="roleId" ></key>
+               <list-index column="idr"></list-index>
+         <element column="userid"  type="int"></element>
+        </list>
+        
+		<list name="roleMenus" table="role_menus"  cascade="all" lazy="false">
+            <key column="roleId" ></key>
+               <list-index column="idm"></list-index>
+           <element column="menuid"  type="int"></element>
+        </list>
+	</class>
+
+</hibernate-mapping>

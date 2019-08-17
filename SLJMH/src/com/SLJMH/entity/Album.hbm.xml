@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+    
+<hibernate-mapping>
+	<!-- 建立类与表的映射 -->
+	<class name="com.SLJMH.entity.Album" table="album">
+		<id name="albumID" column="albumID">
+			<generator class="identity"/>
+		</id>
+		<!-- 普通属性 -->
+		<property name="albumName" column="albumName" type="string"/>
+		<property name="albumDatetime" column="albumDatetime"/>
+		<property name="albumPic" column="albumPic" type="string"/>
+		<property name="albumTag" column="albumTag" type="string"/>
+		<property name="albumuserName" column="albumuserName" type="string"/>
+		
+	</class>
+	
+
+</hibernate-mapping>

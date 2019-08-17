@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+                                   "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+ <!-- 建立类与表的映射 -->
+ <class name="com.SLJMH.entity.Blog" table="blog">
+  <id column="blogId" name="blogId">
+   <generator class="identity"/>
+  </id>
+  <!-- 普通属性 -->
+  <property column="blogTitle" generated="never" lazy="false"
+   name="blogTitle" type="string"/>
+  <property column="blogDate" generated="never" lazy="false" name="blogDate"/>
+  <property column="blogContent" generated="never" lazy="false"
+   name="blogContent" type="text"/>
+  <property column="blogBackPic" generated="never" lazy="false"
+   name="blogBackPic" type="string"/>
+  <property column="blogSummary" generated="never" lazy="false"
+   name="blogSummary" type="string"/>
+  <property column="blogTag" generated="never" lazy="false"
+   name="blogTag" type="string"/>
+  <property column="bloguserName" generated="never" lazy="false"
+   name="bloguserName" type="string"/>
+  <property column="bloguserId" generated="never" lazy="false"
+  name="bloguserId" type="integer"/>
+ </class>
+</hibernate-mapping>

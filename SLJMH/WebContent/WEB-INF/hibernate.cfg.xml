@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-configuration PUBLIC
+	"-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+	"http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+
+<hibernate-configuration>
+<session-factory>
+	<property name="hibernate.dialect">
+		org.hibernate.dialect.MySQLDialect
+	</property>
+	<!-- 可选的属性 -->
+	<property name="hibernate.show_sql">true</property>
+	<property name="hibernate.format_sql">true</property>
+	<property name="hibernate.connection.autocommit">false</property>
+	<property name="hibernate.hbm2ddl.auto">update</property>
+	<!-- 设置本地session -->
+	<!-- <property name="hibernate.current_session_context_class">thread</property> -->
+	<!-- 通知Hibernate加载那些映射文件 -->
+	<mapping resource="com/SLJMH/entity/User.hbm.xml" />
+	<mapping resource="com/SLJMH/entity/Menu.hbm.xml" />
+	<mapping resource="com/SLJMH/entity/Role.hbm.xml" />
+	<mapping resource="com/SLJMH/entity/Ico.hbm.xml" />
+	<mapping resource="com/SLJMH/entity/Notice.hbm.xml" />
+	<mapping resource="com/SLJMH/entity/UserNotice.hbm.xml" />
+	<mapping resource="com/SLJMH/entity/Files.hbm.xml" />
+	<mapping resource="com/SLJMH/entity/Album.hbm.xml" />
+	<mapping resource="com/SLJMH/entity/Pics.hbm.xml" />
+	<mapping resource="com/SLJMH/entity/Blog.hbm.xml" />
+	<mapping resource="com/SLJMH/entity/Mood.hbm.xml" />
+	<mapping resource="com/SLJMH/entity/WebInfo.hbm.xml" />
+	<mapping resource="com/SLJMH/entity/FriendShip.hbm.xml" />
+	<mapping resource="com/SLJMH/entity/Complaint.hbm.xml" />
+	<mapping resource="com/SLJMH/entity/ComplaintProcessLog.hbm.xml" />
+	<mapping resource="com/SLJMH/entity/Comment.hbm.xml" />
+	<mapping resource="com/SLJMH/entity/Reply.hbm.xml" />
+</session-factory>
+</hibernate-configuration>

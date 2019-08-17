@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+                                   "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!--
+  ~
+  ~ www.prosysoft.com Inc.
+  ~ Copyright (c) 2019  All Rights Reserved
+  -->
+<hibernate-mapping>
+ <!-- 建立类与表的映射 -->
+ <class name="com.SLJMH.entity.Complaint" table="user_complaint">
+  <id column="id" name="id" type="java.lang.Long">
+   <generator class="identity"/>
+  </id>
+  <!-- 普通属性 -->
+  <property column="user_id" generated="never" lazy="false"
+   name="userId" type="java.lang.Long"/>
+  <property column="user_name" generated="never" lazy="false"
+   name="userName" type="string"/>
+  <property column="complainted_user_id" generated="never" lazy="false"
+   name="complaintedUserId" type="long"/>
+  <property column="complainted_user_name" generated="never"
+   lazy="false" name="complaintedUserName" type="string"/>
+  <property column="complaint_time" generated="never" lazy="false"
+   name="complaintTime" type="java.util.Date"/>
+  <property column="complaint_type" generated="never" lazy="false"
+   name="complaintType" type="int"/>
+  <property column="attachment_name" generated="never" lazy="false"
+   name="attachmentName" type="string"/>
+  <property column="attachment_path" generated="never" lazy="false"
+   name="attachmentPath" type="string"/>
+  <property column="process_status" generated="never" lazy="false"
+   name="processStatus" type="int"/>
+  <property column="appeal_time" generated="never" lazy="false"
+   name="appealTime" type="date"/>
+  <property column="complaint_target_id" generated="never" lazy="false"
+   name="complaintTargetId" type="integer"/>
+  <property column="complaint_desc" generated="never" lazy="false"
+   name="complaintDesc" type="string"/>
+  <property column="appeal_reason" generated="never" lazy="false"
+   name="appealReason" type="string"/>
+ </class>
+</hibernate-mapping>

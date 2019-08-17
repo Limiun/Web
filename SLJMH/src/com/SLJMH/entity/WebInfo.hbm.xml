@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+    
+<hibernate-mapping>
+	<!-- 建立类与表的映射 -->
+	<class name="com.SLJMH.entity.WebInfo" table="webinfo">
+		<id name="webInfoId" column="webInfoId">
+			<generator class="identity"/>
+		</id>
+		<!-- 普通属性 -->
+		<property name="webTitle" column="webTitle" type="string"/>
+		<property name="webSummary" column="webSummary" type="string"/>
+		<property name="webIntroduction" column="webIntroduction" type="text"/>
+		
+		<property name="brandTitle" column="brandTitle" type="string"/>
+		<property name="brandSummary" column="brandSummary" type="string"/>
+		<property name="brandIntroduction" column="brandIntroduction" type="text"/>
+		<property name="brandBackPic" column="brandBackPic" type="string"/>
+		<property name="blogId" column="blogId" type="int"/>
+		
+    <property name="aboutTitle" column="aboutTitle" type="string"/>
+    <property name="aboutSummary" column="aboutSummary" type="string"/>
+    <property name="aboutIntroduction" column="aboutIntroduction" type="string"/>
+	<property name="aboutInfo" column="aboutInfo" type="text"/>
+	<property name="aboutPic1" column="aboutPic1" type="string"/>
+	<property name="aboutPic2" column="aboutPic2" type="string"/>
+	<property name="aboutPic3" column="aboutPic3" type="string"/>
+	</class>
+	
+
+</hibernate-mapping>

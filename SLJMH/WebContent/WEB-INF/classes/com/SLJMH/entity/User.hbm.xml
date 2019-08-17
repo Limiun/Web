@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+    
+<hibernate-mapping>
+	<!-- 建立类与表的映射 -->
+	<class name="com.SLJMH.entity.User" table="user">
+		<id name="userId" column="userId">
+			<generator class="identity"/>
+		</id>
+		<!-- 普通属性 -->
+		<property name="userName" column="userName" type="string"/>
+		<property name="userPic" column="userPic" type="string"/>
+		<property name="userNickName" column="userNickName"/>
+		<property name="userPassWord" column="userPassWord" type="string"/>
+		<property name="userEmail" column="userEmail"/>
+		<property name="userIdentify" column="userIdentify" type="string"/>
+		<property name="userTrueName" column="userTrueName" type="string"/>
+		<property name="userBirthday" column="userBirthday" type="string"/>
+		<property name="userSex" column="userSex" type="string"/>
+		<property name="userStar" column="userStar" type="string"/>
+		<property name="userBlood" column="userBlood" type="string"/>
+		<property name="userCharacter" column="userCharacter" type="string"/>
+		<property name="userHobby" column="userHobby" type="string"/>
+		<property name="userJob" column="userJob" type="string"/>
+		<property name="userStateReason" column="userStateReason" type="string"/>
+	
+	</class>
+	
+
+</hibernate-mapping>

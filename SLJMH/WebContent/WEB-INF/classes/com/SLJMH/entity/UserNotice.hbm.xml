@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+    
+<hibernate-mapping>
+	<!-- 建立类与表的映射 -->
+	<class name="com.SLJMH.entity.UserNotice" table="userNotice">
+		<id name="Id" column="Id">
+		<generator class="identity"/>
+		</id>
+		<!-- 普通属性 -->
+		<property name="userId" column="userId" type="int"/>
+		<property name="noticeState" column="noticeState" />
+		<property name="noticeTitle" column="noticeTitle"/>
+		<property name="noticeDate" column="noticeDate"/>
+		<property name="noticeContent" column="noticeContent" type="text"/>
+	</class>
+	
+
+</hibernate-mapping>

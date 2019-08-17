@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~
+  ~ www.prosysoft.com Inc.
+  ~ Copyright (c) 2019  All Rights Reserved
+  -->
+
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+    
+<hibernate-mapping>
+	<!-- 建立类与表的映射 -->
+	<class name="com.SLJMH.entity.FriendShip" table="user_friend_ship">
+		<id name="id" column="id" type="java.lang.Long">
+			<generator class="identity"/>
+		</id>
+		<!-- 普通属性 -->
+		<property name="userId" column="user_id" type="java.lang.Long"/>
+		<property name="friendUserId" column="friend_user_id" type="java.lang.Long"/>
+		<property name="friendNickName" column="friend_nick_name" type="string"/>
+		<property name="friendUserPic" column="friend_user_pic" type="string"/>
+		<property name="addTime" column="add_time" type="java.util.Date"/>
+		<property name="status" column="status" type="int"/>
+		<property name="remark" column="remark" type="string"/>
+	</class>
+</hibernate-mapping>

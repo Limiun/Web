@@ -1,0 +1,245 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	 xmlns:aop="http://www.springframework.org/schema/aop"
+	 xmlns:context="http://www.springframework.org/schema/context"
+	 xmlns:tx="http://www.springframework.org/schema/tx"
+	 xsi:schemaLocation="http://www.springframework.org/schema/beans 
+                        http://www.springframework.org/schema/beans/spring-beans.xsd
+                        http://www.springframework.org/schema/aop 
+                        http://www.springframework.org/schema/aop/spring-aop.xsd
+                        http://www.springframework.org/schema/context 
+                        http://www.springframework.org/schema/context/spring-context.xsd
+                        http://www.springframework.org/schema/tx 
+                        http://www.springframework.org/schema/tx/spring-tx.xsd">
+
+    <context:component-scan base-package="com.SLJMH">
+        <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"></context:exclude-filter>
+    </context:component-scan>
+	
+	<!-- 配置c3p0连接池 -->
+    <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
+        <!-- 数据库连接信息 -->
+        <property name="driverClass" value="com.mysql.jdbc.Driver"></property>
+        <property name="jdbcUrl" value="jdbc:mysql://localhost:3306/yor-website?useUnicode=true&amp;characterEncoding=UTF-8"></property>
+        <property name="user" value="root"></property>
+        <property name="password" value=""></property>
+        <!-- 其他配置信息 -->
+        <!--初始化时获取三个连接，取值应在minPoolSize与maxPoolSize之间。Default: 3 -->
+        <property name="initialPoolSize" value="3"></property>
+        <property name="minPoolSize" value="3"></property>
+        <property name="maxPoolSize" value="5"></property>
+        <!--当连接池中的连接耗尽的时候c3p0一次同时获取的连接数。Default: 3 -->
+        <property name="acquireIncrement" value="3"></property>
+        <!-- 控制数据源内加载的PreparedStatements数量。如果maxStatements与maxStatementsPerConnection均为0，则缓存被关闭。Default: 0 -->
+        <property name="maxStatements" value="8"></property>
+        <!--maxStatementsPerConnection定义了连接池内单个连接所拥有的最大缓存statements数。Default: 0 -->
+        <property name="maxStatementsPerConnection" value="5"></property>
+        <!--最大空闲时间,1800秒内未使用则连接被丢弃。若为0则永不丢弃。Default: 0 -->
+        <property name="maxIdleTime" value="1800"></property>
+    </bean>
+    
+	<!-- 配置SessionFactory -->
+    <bean id="sessionFactory" class="org.springframework.orm.hibernate3.LocalSessionFactoryBean">
+        <property name="configLocation" value="/WEB-INF/hibernate.cfg.xml"></property>
+        <property name="dataSource" ref="dataSource"></property>
+    </bean>
+     <bean id="hibernateTemplate" class="org.springframework.orm.hibernate3.HibernateTemplate">  
+        <property name="sessionFactory" ref="sessionFactory"></property>  
+    </bean> 
+	
+	
+	<!-- 配置事务管理器  JDBC -->
+    <!-- <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+      <property name="dataSource" ref="dataSource"/>
+    </bean> -->
+    
+   <!-- 配置事务管理器  Hibernate -->
+	 <bean id="transactionManager" class="org.springframework.orm.hibernate3.HibernateTransactionManager">
+        <property name="sessionFactory" ref="sessionFactory" />
+    </bean>
+   <!-- 定义jdbctemplate  不需要注入模版，直接注入连接池即可 -->
+   <!-- <bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
+		<property name="dataSource" ref="dataSource"/>
+	    </bean> -->
+	    
+	    
+	<!-- 事务其实就是利用AOP对方法的增强-->
+    <!-- 配置生成代理对象:为什么事务的配置这么搞，其实就是Spring的传统AOP的代理，-->
+    <!--缺点:就是需要为每一个管理事务的类生成代理.需要为每个类都需要进行配置,而且BaseServiceImpl怎么注入. 生成的事务代理要注入Servlet-->
+    <!-- 下面的TX的事务配置不需要往Servlet中注入代理对象了，因为对ServiceImpl本身已经是代理对象了，因为自动代理是基于后处理Bean的-->
+    <!--<bean id="userServiceImplProxy" class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+        <property name="target" ref="UserServiceImpl"/>
+        <property name="transactionManager" ref="transactionManager"/>
+        <property name="transactionAttributes">
+            <props>
+                <prop key="save">PROPAGATION_REQUIRED</prop>
+            </props>
+        </property>
+    </bean> -->
+      <!-- 定义一个增强 -->
+    <tx:advice id="txAdvice" transaction-manager="transactionManager">
+        <!-- 增强(事务)的属性的配置 -->
+        <tx:attributes>
+            <!-- 
+                isolation:DEFAULT    :事务的隔离级别.
+                propagation            :事务的传播行为.
+                read-only            :false.不是只读
+                timeout                :-1
+                no-rollback-for        :发生哪些异常不回滚
+                rollback-for        :发生哪些异常回滚事务
+             -->
+            <tx:method name="save*" propagation="REQUIRED" />   
+            <tx:method name="update*" propagation="REQUIRED" />
+            <tx:method name="add*" propagation="REQUIRED" />
+            <tx:method name="delete*" propagation="REQUIRED" />  
+            <tx:method name="find*" propagation="SUPPORTS" read-only="true"/>   
+            <tx:method name="get*" propagation="SUPPORTS" read-only="true"/>  
+        </tx:attributes>
+     </tx:advice>
+     <aop:config>
+     <!-- 查询不需要事务 -->
+        <!-- 定义切点:哪些类的哪些方法应用增强：这里定义对哪些方法进行增强，而tx:method是对这些方法执行哪种事务配置 -->
+        <aop:pointcut expression="execution(* com.SLJMH.service.impl..*Impl.*(..))" id="mypointcut"/>
+        <!-- 定义切面: -->
+        <aop:advisor advice-ref="txAdvice" pointcut-ref="mypointcut"/>
+    </aop:config>
+    
+
+    
+      <!-- DAO -->
+	<bean id="UserDaoImpl" class="com.SLJMH.dao.impl.UserDaoImpl">
+	 <!-- <property name="jdbcTemplate"  ref="jdbcTemplate"/> 有数据源注入的话，jdbc模版也不需要注入了,因为使用了继承-->
+	<!--  <property name="dataSource"  ref="dataSource"/>-->
+	 <property name="hibernateTemplate" ref="hibernateTemplate"/>  
+	</bean>
+	<bean id="MenuDaoImpl" class="com.SLJMH.dao.impl.MenuDaoImpl">
+	 <property name="hibernateTemplate" ref="hibernateTemplate"/>  
+	</bean>
+	<bean id="RoleDaoImpl" class="com.SLJMH.dao.impl.RoleDaoImpl">
+	 <property name="hibernateTemplate" ref="hibernateTemplate"/>  
+	</bean>
+	<bean id="IcoDaoImpl" class="com.SLJMH.dao.impl.IcoDaoImpl">
+	 <property name="hibernateTemplate" ref="hibernateTemplate"/>  
+	</bean>
+	<bean id="NoticeDaoImpl" class="com.SLJMH.dao.impl.NoticeDaoImpl">
+	 <property name="hibernateTemplate" ref="hibernateTemplate"/>  
+	</bean>
+	<bean id="UserNoticeDaoImpl" class="com.SLJMH.dao.impl.UserNoticeDaoImpl">
+	 <property name="hibernateTemplate" ref="hibernateTemplate"/>  
+	</bean>
+	<bean id="FileDaoImpl" class="com.SLJMH.dao.impl.FileDaoImpl">
+	 <property name="hibernateTemplate" ref="hibernateTemplate"/>  
+	</bean>
+	<bean id="PicDaoImpl" class="com.SLJMH.dao.impl.PicDaoImpl">
+	 <property name="hibernateTemplate" ref="hibernateTemplate"/>  
+	</bean>
+	<bean id="BlogDaoImpl" class="com.SLJMH.dao.impl.BlogDaoImpl">
+	 <property name="hibernateTemplate" ref="hibernateTemplate"/>  
+	</bean>
+	<bean id="MoodDaoImpl" class="com.SLJMH.dao.impl.MoodDaoImpl">
+	 <property name="hibernateTemplate" ref="hibernateTemplate"/>  
+	</bean>
+	    
+	
+	<bean id="WebInfoDaoImpl" class="com.SLJMH.dao.impl.WebInfoDaoImpl">
+	 <property name="hibernateTemplate" ref="hibernateTemplate"/>  
+	</bean>
+	<bean id="AlbumDaoImpl" class="com.SLJMH.dao.impl.AlbumDaoImpl">
+	 <property name="hibernateTemplate" ref="hibernateTemplate"/>  
+	</bean>
+	
+	
+	
+	
+	 <!-- Service-->
+	<bean id="UserServiceImpl" class="com.SLJMH.service.impl.UserServiceImpl"
+		scope="singleton" init-method="setup" destroy-method="down">
+		<property name="userDaoImpl" ref="UserDaoImpl"></property>
+	</bean>
+	<bean id="MenuServiceImpl" class="com.SLJMH.service.impl.MenuServiceImpl"
+		scope="singleton" >
+		<property name="menuDaoImpl" ref="MenuDaoImpl"></property>
+	</bean>
+	<bean id="RoleServiceImpl" class="com.SLJMH.service.impl.RoleServiceImpl"
+		scope="singleton" >
+		<property name="roleDaoImpl" ref="RoleDaoImpl"></property>
+	</bean>
+	<bean id="IcoServiceImpl" class="com.SLJMH.service.impl.IcoServiceImpl"
+		scope="singleton" >
+		<property name="icoDaoImpl" ref="IcoDaoImpl"></property>
+	</bean>
+	<bean id="NoticeServiceImpl" class="com.SLJMH.service.impl.NoticeServiceImpl"
+		scope="singleton" >
+		<property name="noticeDaoImpl" ref="NoticeDaoImpl"></property>
+	</bean>
+	
+	<bean id="UserNoticeServiceImpl" class="com.SLJMH.service.impl.UserNoticeServiceImpl"
+		scope="singleton" >
+		<property name="userNoticeDaoImpl" ref="UserNoticeDaoImpl"></property>
+	</bean>
+	<bean id="FileServiceImpl" class="com.SLJMH.service.impl.FileServiceImpl"
+		scope="singleton" >
+		<property name="fileDaoImpl" ref="FileDaoImpl"></property>
+	</bean>
+	
+	<bean id="PicServiceImpl" class="com.SLJMH.service.impl.PicServiceImpl"
+		scope="singleton" >
+		<property name="picDaoImpl" ref="PicDaoImpl"></property>
+	</bean>
+	<bean id="BlogServiceImpl" class="com.SLJMH.service.impl.BlogServiceImpl"
+		scope="singleton" >
+		<property name="blogDaoImpl" ref="BlogDaoImpl"></property>
+	</bean>
+	<bean id="MoodServiceImpl" class="com.SLJMH.service.impl.MoodServiceImpl"
+		scope="singleton" >
+		<property name="moodDaoImpl" ref="MoodDaoImpl"></property>
+	</bean>
+	<bean id="WebInfoServiceImpl" class="com.SLJMH.service.impl.WebInfoServiceImpl"
+		scope="singleton" >
+		<property name="webInfoDaoImpl" ref="WebInfoDaoImpl"></property>
+	</bean>
+	<bean id="albumServiceImpl" class="com.SLJMH.service.impl.AlbumServiceImpl"
+		scope="singleton" >
+		<property name="albumDaoImpl" ref="AlbumDaoImpl"></property>
+	</bean>
+	
+	
+	
+	<!-- 自动AOP开始  -->
+	<!--这个Bean是对UserServiceImpl中的find*方法增强进行测试-->
+    <bean id="aroundAdvice" class="com.SLJMH.service.impl.MyAroundAdvice"></bean>
+    <bean id="myPointcutAdvisor" class="org.springframework.aop.support.RegexpMethodPointcutAdvisor">
+        <property name="pattern" value="com.SLJMH.service.impl.UserServiceImpl.find.*"/>
+        <property name="advice" ref="aroundAdvice"/>
+    </bean>
+     <!-- 自动生成代理 -->
+    <bean class="org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator"></bean>
+    <!-- 自动AOP结束  -->
+    
+    
+     <!-- AspectJ开始  -->
+     <!-- proxy-target-class默认"false",更改为"ture"使用CGLib动态代理 -->    
+     <!-- <aop:aspectj-autoproxy proxy-target-class="false"/>-->    
+     <!-- Advisor:Spring传统意义上的切面:支持一个切点和一个通知的组合. Aspect:可以支持多个切点和多个通知的组合. 所以最终使用AspectJ  -->
+     <aop:aspectj-autoproxy/> 
+     <bean id="myAspect" class="com.SLJMH.service.impl.MyAspect"></bean>
+     <!-- AspectJ结束 -->
+     
+     
+	<!-- 使用SPEL注入Bean的属性，而且也没有额外增加schemaLocation /> -->
+	<bean id="User" class="com.SLJMH.entity.User"></bean>
+	<!-- <bean id="RegisterServlet" class="yorbesta.vip.servlet.RegisterServlet">
+		<property name="userServiceImpl" ref="UserServiceImpl"></property>
+		<property name="people" ref="User" />
+		<property name="user" value="#{User}" />
+		<property name="userServiceImpl" value="#{UserServiceImpl}" />
+		<property name="roleServiceImpl" value="#{RoleServiceImpl}" />
+	</bean> -->
+
+
+    <!--引用好友管理相关bean配置-->
+    <import resource="spring-beans-friend.xml"/>
+
+
+</beans>

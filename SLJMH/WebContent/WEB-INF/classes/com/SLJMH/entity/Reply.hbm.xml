@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+    
+<hibernate-mapping>
+	<!-- 建立类与表的映射 -->
+	<class name="com.SLJMH.entity.Reply" table="reply">
+		<id name="r_id" column="r_id">
+			<generator class="identity"/>
+		</id>
+		<!-- 普通属性 -->
+		<property name="r_userid" column="r_userid" type="integer"/>
+		<property name="r_contentid" column="r_contentid" type="integer"/>
+		<property name="r_createtime" column="r_createtime" />
+		<property name="r_content" column="r_content" type="text"/>
+		<property name="r_otherid" column="r_otherid" type="integer"/>
+		<property name="r_words" column="r_words" type="integer"/>
+	</class>
+	
+
+</hibernate-mapping>
